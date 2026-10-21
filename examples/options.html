@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Preferences</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Francois+One&family=VT323&display=swap">
+  <link rel="stylesheet" href="../phosphor.css">
+  <style>
+    main { max-width: 980px; margin: 0 auto; display: grid; gap: 20px; }
+    .prefs { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 40px; }
+    .prefs > h1, .prefs > .switches, .prefs > .actions { grid-column: 1 / -1; }
+    .group { display: grid; gap: 6px; }
+    .group .ph-label { font-size: 1.125rem; }
+    .slider { display: grid; grid-template-columns: 1fr auto; gap: 4px 14px; align-items: center; }
+    .slider .ph-label { grid-column: 1 / -1; font-size: 1.125rem; }
+    .slider output { text-align: right; }
+    .switches { display: flex; flex-wrap: wrap; gap: 12px 32px; padding-top: 16px; border-top: 2px solid var(--ph-metal-lo); box-shadow: 0 -2px 0 var(--ph-metal-hi); }
+    .switches .ph-lamp { color: var(--ph-bone); }
+    .actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px 32px; }
+    @media (max-width: 720px) { .prefs { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="ph-chassis">
+<main class="ph-crt">
+  <nav class="ph-nav" aria-label="Pages">
+    <a class="ph-tag" href="index.html">Kit</a>
+    <a class="ph-tag" href="login.html">Login</a>
+    <a class="ph-tag" href="barter.html">Barter</a>
+    <a class="ph-tag" href="options.html" aria-current="page">Options</a>
+    <a class="ph-tag" href="bulletin.html">Bulletin</a>
+  </nav>
+
+  <form class="ph-plate prefs" id="prefs" aria-labelledby="prefs-title">
+    <h1 class="ph-label" id="prefs-title" style="font-size: 1.75rem">Preferences</h1>
+
+    <div class="ph-stack" style="gap: 18px">
+      <div class="group">
+        <span class="ph-label" id="game-difficulty">Game difficulty</span>
+        <div class="ph-tabs ph-tabs--row" role="group" aria-labelledby="game-difficulty" data-default="1">
+          <button type="button" class="ph-tab" aria-pressed="false">Easy</button>
+          <button type="button" class="ph-tab" aria-pressed="true">Normal</button>
+          <button type="button" class="ph-tab" aria-pressed="false">Hard</button>
+        </div>
+      </div>
+      <div class="group">
+        <span class="ph-label" id="combat-difficulty">Combat difficulty</span>
+        <div class="ph-tabs ph-tabs--row" role="group" aria-labelledby="combat-difficulty" data-default="1">
+          <button type="button" class="ph-tab" aria-pressed="false">Wimpy</button>
+          <button type="button" class="ph-tab" aria-pressed="true">Normal</button>
+          <button type="button" class="ph-tab" aria-pressed="false">Rough</button>
+        </div>
+      </div>
+      <div class="group">
+        <span class="ph-label" id="violence">Violence level</span>
+        <div class="ph-tabs ph-tabs--row" role="group" aria-labelledby="violence" data-default="3">
+          <button type="button" class="ph-tab" aria-pressed="false">None</button>
+          <button type="button" class="ph-tab" aria-pressed="false">Minimal</button>
+          <button type="button" class="ph-tab" aria-pressed="false">Normal</button>
+          <button type="button" class="ph-tab" aria-pressed="true">Maximum blood</button>
+        </div>
+      </div>
+      <div class="group">
+        <span class="ph-label" id="highlight">Target highlight</span>
+        <div class="ph-tabs ph-tabs--row" role="group" aria-labelledby="highlight" data-default="2">
+          <button type="button" class="ph-tab" aria-pressed="false">Off</button>
+          <button type="button" class="ph-tab" aria-pressed="false">On</button>
+          <button type="button" class="ph-tab" aria-pressed="true">Targeting only</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ph-stack" style="gap: 12px">
+      <label class="slider"><span class="ph-label">Combat speed</span><input class="ph-slider" type="range" value="50"><output class="ph-value"></output></label>
+      <label class="slider"><span class="ph-label">Text delay</span><input class="ph-slider" type="range" value="40"><output class="ph-value"></output></label>
+      <label class="slider"><span class="ph-label">Master volume</span><input class="ph-slider" type="range" value="80"><output class="ph-value"></output></label>
+      <label class="slider"><span class="ph-label">Music volume</span><input class="ph-slider" type="range" value="60"><output class="ph-value"></output></label>
+      <label class="slider"><span class="ph-label">Sound effects</span><input class="ph-slider" type="range" value="70"><output class="ph-value"></output></label>
+      <label class="slider"><span class="ph-label">Brightness</span><input class="ph-slider" type="range" value="50"><output class="ph-value"></output></label>
+    </div>
+
+    <div class="switches">
+      <button type="button" class="ph-lamp" aria-pressed="true" data-default="true">Subtitles</button>
+      <button type="button" class="ph-lamp" aria-pressed="false" data-default="false">Always run</button>
+      <button type="button" class="ph-lamp" aria-pressed="true" data-default="true">Item highlight</button>
+      <button type="button" class="ph-lamp" aria-pressed="true" data-default="true">Combat taunts</button>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="ph-button" id="default">Default</button>
+      <a class="ph-button ph-button--lamp" href="index.html">Done</a>
+      <a class="ph-button" href="index.html">Cancel</a>
+    </div>
+  </form>
+</main>
+
+<script>
+  const form = document.getElementById("prefs");
+  const showValues = () => form.querySelectorAll(".slider").forEach((label) => {
+    label.querySelector("output").textContent = `${label.querySelector("input").value}%`;
+  });
+
+  form.addEventListener("input", showValues);
+
+  form.querySelectorAll(".ph-tabs").forEach((group) => group.addEventListener("click", (event) => {
+    const tab = event.target.closest(".ph-tab");
+    if (!tab) return;
+    group.querySelectorAll(".ph-tab").forEach((t) => t.setAttribute("aria-pressed", t === tab));
+  }));
+
+  form.querySelectorAll(".switches .ph-lamp").forEach((lamp) => lamp.addEventListener("click", () => {
+    lamp.setAttribute("aria-pressed", lamp.getAttribute("aria-pressed") !== "true");
+  }));
+
+  document.getElementById("default").addEventListener("click", () => {
+    form.reset();
+    form.querySelectorAll(".ph-tabs").forEach((group) => {
+      group.querySelectorAll(".ph-tab").forEach((t, i) => t.setAttribute("aria-pressed", i === Number(group.dataset.default)));
+    });
+    form.querySelectorAll(".switches .ph-lamp").forEach((lamp) => lamp.setAttribute("aria-pressed", lamp.dataset.default));
+    showValues();
+  });
+
+  showValues();
+</script>
+</body>
+</html>

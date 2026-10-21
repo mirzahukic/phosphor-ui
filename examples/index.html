@@ -1,0 +1,1171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Phosphor UI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Francois+One&family=VT323&display=swap">
+  <link rel="stylesheet" href="../phosphor.css">
+  <style>
+    main { max-width: 1000px; margin: 0 auto; display: grid; gap: 20px; }
+    h2.ph-label { margin-bottom: 14px; }
+
+    .console { display: grid; grid-template-columns: 120px 1fr 120px; grid-template-areas: ". reply ." "left options right"; gap: 18px 24px; }
+    .console .ph-grille { grid-area: reply; }
+    .console__left { grid-area: left; justify-items: center; }
+    .console__options { grid-area: options; min-height: 150px; }
+    .console__right { grid-area: right; justify-items: center; }
+
+    .sheet { display: grid; grid-template-columns: auto 1fr 1fr; gap: 18px 28px; }
+    .sheet__head, .sheet__foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 10px 28px; }
+    .sheet__foot { justify-content: flex-end; }
+
+    .intro { margin: 0; max-width: 60ch; font: 1.375rem/1.25 var(--ph-font-text); color: var(--ph-bone); }
+    .specimens { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 28px; align-items: start; }
+    .spec { display: grid; gap: 10px; align-content: start; justify-items: start; }
+    .spec > :not(code) { max-width: 100%; box-sizing: border-box; }
+    .spec--wide { grid-column: 1 / -1; justify-items: stretch; }
+    .spec > .ph-prose { max-width: 65ch; }
+    .spec code { font: 1.125rem/1.2 var(--ph-font-text); color: var(--ph-bone); }
+    .spec code + code { margin-top: -8px; }
+    .chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 18px; }
+    .chip { display: grid; gap: 2px; font: 1.125rem/1.1 var(--ph-font-text); color: var(--ph-bone); }
+    .chip div { height: 44px; margin-bottom: 4px; border: 2px solid var(--ph-ink); box-shadow: inset 2px 2px 0 rgb(255 255 255 / 0.25), inset -2px -2px 0 rgb(0 0 0 / 0.4); }
+    .chip span:last-child { color: var(--ph-metal-hi); }
+    .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 16px; }
+    .icon-cell { display: grid; justify-items: center; gap: 6px; font-size: 1.75rem; color: var(--ph-green); }
+    .skillboard { display: grid; gap: 14px; justify-items: center; }
+    .skillboard__list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .skillboard__list li { display: flex; align-items: center; gap: 10px; }
+    .skillboard__list .ph-button { min-width: 8.5em; }
+    .section-index { gap: 6px; }
+    @media (max-width: 420px) { .skillboard__list .ph-button { min-width: 0; } }
+    .hud { flex: 1 1 420px; display: grid; grid-template-columns: 1fr auto; gap: 20px; align-content: start; }
+    .hud__log { min-height: 5em; }
+    @media (max-width: 560px) { .hud { grid-template-columns: 1fr; } }
+    .swatch { width: 100%; height: 56px; border: 2px solid var(--ph-ink); }
+
+    @media (max-width: 760px) {
+      .console { grid-template-columns: 1fr 1fr; grid-template-areas: "reply reply" "options options" "left right"; }
+      .sheet { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="ph-chassis">
+<main class="ph-crt">
+  <nav class="ph-nav" aria-label="Pages">
+    <a class="ph-tag" href="index.html" aria-current="page">Kit</a>
+    <a class="ph-tag" href="login.html">Login</a>
+    <a class="ph-tag" href="barter.html">Barter</a>
+    <a class="ph-tag" href="options.html">Options</a>
+    <a class="ph-tag" href="bulletin.html">Bulletin</a>
+  </nav>
+  <h1 class="ph-label" style="font-size: 2rem">Phosphor UI</h1>
+  <p class="intro">Every part of phosphor.css, with its class name. All colors come from a classic 256-color game palette. Composed examples are at the bottom of the page.</p>
+  <nav class="ph-row section-index" aria-label="Sections">
+    <a class="ph-button ph-button--key" href="#color-title">Color</a>
+    <a class="ph-button ph-button--key" href="#type-title">Type and text</a>
+    <a class="ph-button ph-button--key" href="#surface-title">Surfaces</a>
+    <a class="ph-button ph-button--key" href="#icon-title">Icons</a>
+    <a class="ph-button ph-button--key" href="#list-title">Lists</a>
+    <a class="ph-button ph-button--key" href="#button-title">Buttons</a>
+    <a class="ph-button ph-button--key" href="#tab-title">Tabs</a>
+    <a class="ph-button ph-button--key" href="#form-title">Form</a>
+    <a class="ph-button ph-button--key" href="#choice-title">Choices</a>
+    <a class="ph-button ph-button--key" href="#input-title">More inputs</a>
+    <a class="ph-button ph-button--key" href="#data-title">Data</a>
+    <a class="ph-button ph-button--key" href="#container-title">Containers</a>
+    <a class="ph-button ph-button--key" href="#feedback-title">Feedback and display</a>
+    <a class="ph-button ph-button--key" href="#overlay-title">Menus and overlays</a>
+    <a class="ph-button ph-button--key" href="#stat-title">Stats</a>
+    <a class="ph-button ph-button--key" href="#action-title">Actions</a>
+    <a class="ph-button ph-button--key" href="#layout-title">Page</a>
+    <a class="ph-button ph-button--key" href="#prose-title">Prose</a>
+    <a class="ph-button ph-button--key" href="#web-title">Web patterns</a>
+    <a class="ph-button ph-button--key" href="#examples-title">Examples</a>
+  </nav>
+
+  <section class="ph-plate ph-stack" aria-labelledby="color-title">
+    <h2 class="ph-label" id="color-title" style="font-size: 1.75rem">Color</h2>
+    <div class="chips">
+        <div class="chip" data-token="--ph-metal" data-index="77"><div style="background: var(--ph-metal)"></div><span>--ph-metal</span><span></span></div>
+        <div class="chip" data-token="--ph-metal-hi" data-index="119"><div style="background: var(--ph-metal-hi)"></div><span>--ph-metal-hi</span><span></span></div>
+        <div class="chip" data-token="--ph-metal-lo" data-index="202"><div style="background: var(--ph-metal-lo)"></div><span>--ph-metal-lo</span><span></span></div>
+        <div class="chip" data-token="--ph-ink" data-index="207"><div style="background: var(--ph-ink)"></div><span>--ph-ink</span><span></span></div>
+        <div class="chip" data-token="--ph-bone" data-index="222"><div style="background: var(--ph-bone)"></div><span>--ph-bone</span><span></span></div>
+        <div class="chip" data-token="--ph-green" data-index="215"><div style="background: var(--ph-green)"></div><span>--ph-green</span><span></span></div>
+        <div class="chip" data-token="--ph-green-dim" data-index="218"><div style="background: var(--ph-green-dim)"></div><span>--ph-green-dim</span><span></span></div>
+        <div class="chip" data-token="--ph-green-hot" data-index="69"><div style="background: var(--ph-green-hot)"></div><span>--ph-green-hot</span><span></span></div>
+        <div class="chip" data-token="--ph-glass" data-index="100"><div style="background: var(--ph-glass)"></div><span>--ph-glass</span><span></span></div>
+        <div class="chip" data-token="--ph-amber" data-index="143"><div style="background: var(--ph-amber)"></div><span>--ph-amber</span><span></span></div>
+        <div class="chip" data-token="--ph-amber-hi" data-index="156"><div style="background: var(--ph-amber-hi)"></div><span>--ph-amber-hi</span><span></span></div>
+        <div class="chip" data-token="--ph-amber-lo" data-index="164"><div style="background: var(--ph-amber-lo)"></div><span>--ph-amber-lo</span><span></span></div>
+        <div class="chip" data-token="--ph-red" data-index="135"><div style="background: var(--ph-red)"></div><span>--ph-red</span><span></span></div>
+        <div class="chip" data-token="--ph-alert" data-index="131"><div style="background: var(--ph-alert)"></div><span>--ph-alert</span><span></span></div>
+        <div class="chip" data-token="--ph-yellow" data-index="58"><div style="background: var(--ph-yellow)"></div><span>--ph-yellow</span><span></span></div>
+        <div class="chip" data-token="--ph-yellow-hot" data-index="57"><div style="background: var(--ph-yellow-hot)"></div><span>--ph-yellow-hot</span><span></span></div>
+        <div class="chip" data-token="--ph-face" data-index="203"><div style="background: var(--ph-face)"></div><span>--ph-face</span><span></span></div>
+        <div class="chip" data-token="--ph-face-down" data-index="83"><div style="background: var(--ph-face-down)"></div><span>--ph-face-down</span><span></span></div>
+        <div class="chip" data-token="--ph-paper" data-index="222"><div style="background: var(--ph-paper)"></div><span>--ph-paper</span><span></span></div>
+        <div class="chip" data-token="--ph-info" data-index="106"><div style="background: var(--ph-info)"></div><span>--ph-info</span><span></span></div>
+        <div class="chip" data-token="--ph-info-text" data-index="102"><div style="background: var(--ph-info-text)"></div><span>--ph-info-text</span><span></span></div>
+        <div class="chip" data-token="--ph-paper-ink" data-index="226"><div style="background: var(--ph-paper-ink)"></div><span>--ph-paper-ink</span><span></span></div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="type-title">
+    <h2 class="ph-label" id="type-title" style="font-size: 1.75rem">Type and text</h2>
+    <div class="specimens">
+      <div class="spec">
+        <p class="ph-label" style="font-size: 2.5rem">Barter</p>
+        <p class="ph-label">Disposition</p>
+        <code>.ph-label</code>
+        <code>--ph-font-plate: Francois One</code>
+      </div>
+      <div class="spec">
+        <div class="ph-screen">
+          <p style="margin: 0">Normal text</p>
+          <p class="ph-dim" style="margin: 0">Dim text</p>
+          <p class="ph-alert" style="margin: 0">Alert text</p>
+        </div>
+        <code>.ph-dim  .ph-alert</code>
+        <code>--ph-font-text: VT323</code>
+      </div>
+      <div class="spec">
+        <div class="ph-paper"><h3>Paper heading</h3><p>Dark ink on paper for long text.</p></div>
+        <code>.ph-paper</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="surface-title">
+    <h2 class="ph-label" id="surface-title" style="font-size: 1.75rem">Surfaces</h2>
+    <div class="specimens">
+      <div class="spec">
+        <div class="ph-plate" style="width: 100%; height: 72px"></div>
+        <code>.ph-plate</code>
+      </div>
+      <div class="spec">
+        <div class="ph-screen" style="width: 100%">Screen glass</div>
+        <code>.ph-screen</code>
+      </div>
+      <div class="spec">
+        <div class="ph-screen ph-screen--bulge" style="width: 100%">Bulged glass</div>
+        <code>.ph-screen--bulge</code>
+      </div>
+      <div class="spec">
+        <div class="ph-grille" style="width: 100%">Mesh grille</div>
+        <code>.ph-grille</code>
+      </div>
+      <div class="spec">
+        <span class="ph-tag">Age 25</span>
+        <code>.ph-tag</code>
+      </div>
+      <div class="spec">
+        <div class="ph-vent"></div>
+        <code>.ph-vent</code>
+      </div>
+      <div class="spec">
+        <div class="swatch" style="background: var(--ph-metal); box-shadow: var(--ph-raised)"></div>
+        <code>--ph-raised</code>
+      </div>
+      <div class="spec">
+        <div class="swatch" style="background: var(--ph-metal); box-shadow: var(--ph-sunken)"></div>
+        <code>--ph-sunken</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="icon-title">
+    <h2 class="ph-label" id="icon-title" style="font-size: 1.75rem">Icons</h2>
+    <div class="specimens">
+      <div class="spec spec--wide">
+        <div class="icon-grid">
+          <div class="icon-cell"><span class="ph-icon ph-icon--close" aria-hidden="true"></span><code>close</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--check" aria-hidden="true"></span><code>check</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--plus" aria-hidden="true"></span><code>plus</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--minus" aria-hidden="true"></span><code>minus</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--arrow-up" aria-hidden="true"></span><code>arrow-up</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--arrow-right" aria-hidden="true"></span><code>arrow-right</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--arrow-down" aria-hidden="true"></span><code>arrow-down</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--arrow-left" aria-hidden="true"></span><code>arrow-left</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--caret-down" aria-hidden="true"></span><code>caret-down</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--menu" aria-hidden="true"></span><code>menu</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--search" aria-hidden="true"></span><code>search</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--gear" aria-hidden="true"></span><code>gear</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--warning" aria-hidden="true"></span><code>warning</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--radiation" aria-hidden="true"></span><code>radiation</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--skull" aria-hidden="true"></span><code>skull</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--folder" aria-hidden="true"></span><code>folder</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--file" aria-hidden="true"></span><code>file</code></div>
+          <div class="icon-cell"><span class="ph-icon ph-icon--calendar" aria-hidden="true"></span><code>calendar</code></div>
+        </div>
+        <code>.ph-icon  .ph-icon--name  (takes the text color, size is 1em)</code>
+      </div>
+      <div class="spec">
+        <div class="ph-row" style="gap: 8px">
+          <button class="ph-button ph-button--icon" aria-label="Search"><span class="ph-icon ph-icon--search" aria-hidden="true"></span></button>
+          <button class="ph-button ph-button--icon" aria-label="Settings"><span class="ph-icon ph-icon--gear" aria-hidden="true"></span></button>
+          <button class="ph-button ph-button--icon" aria-label="Close"><span class="ph-icon ph-icon--close" aria-hidden="true"></span></button>
+        </div>
+        <code>.ph-button--icon</code>
+      </div>
+      <div class="spec">
+        <button class="ph-button"><span class="ph-icon ph-icon--radiation" aria-hidden="true"></span>Rad-Flush</button>
+        <code>.ph-button with .ph-icon</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="list-title">
+    <h2 class="ph-label" id="list-title" style="font-size: 1.75rem">Lists</h2>
+    <div class="specimens">
+      <div class="spec">
+        <div class="ph-screen" style="width: 100%">
+          <ul class="ph-options">
+            <li><button>Tell me about the caravan guild.</button></li>
+            <li><button>I need a purifier part.</button></li>
+            <li><button>Goodbye.</button></li>
+          </ul>
+        </div>
+        <code>.ph-options</code>
+      </div>
+      <div class="spec">
+        <ul class="ph-screen ph-readout" style="width: 100%">
+          <li>Lockpick <span>20%</span></li>
+          <li aria-current="true">Speech <span>25%</span></li>
+          <li class="ph-dim">Poisoned</li>
+        </ul>
+        <code>.ph-readout</code>
+        <code>[aria-current="true"]  .ph-dim</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="button-title">
+    <h2 class="ph-label" id="button-title" style="font-size: 1.75rem">Buttons</h2>
+    <div class="specimens">
+      <div class="spec">
+        <button class="ph-button">Sneak</button>
+        <button class="ph-button" aria-pressed="true">Lockpick</button>
+        <button class="ph-button" disabled>Steal</button>
+        <code>.ph-button  [aria-pressed]  :disabled</code>
+      </div>
+      <div class="spec">
+        <button class="ph-button ph-button--lamp">Cancel</button>
+        <code>.ph-button--lamp</code>
+      </div>
+      <div class="spec">
+        <div class="ph-row" style="gap: 6px">
+          <button class="ph-button ph-button--key">Inv</button>
+          <button class="ph-button ph-button--key">Map</button>
+          <button class="ph-button ph-button--key">Cha</button>
+          <button class="ph-button ph-button--key">Pip</button>
+        </div>
+        <code>.ph-button--key</code>
+      </div>
+      <div class="spec">
+        <button class="ph-lamp">Done</button>
+        <code>.ph-lamp (game panels and switches)</code>
+      </div>
+      <div class="spec">
+        <button class="ph-lamp ph-toggle" aria-pressed="true">Subtitles</button>
+        <button class="ph-lamp ph-toggle" aria-pressed="false">Always run</button>
+        <code>.ph-lamp[aria-pressed]</code>
+      </div>
+      <div class="spec">
+        <button class="ph-lamp ph-lamp--stack">Talk</button>
+        <code>.ph-lamp--stack</code>
+      </div>
+      <div class="spec">
+        <button class="ph-hazard">Review</button>
+        <code>.ph-hazard</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="tab-title">
+    <h2 class="ph-label" id="tab-title" style="font-size: 1.75rem">Tabs</h2>
+    <div class="specimens">
+      <div class="spec">
+        <div class="ph-tabs">
+          <button class="ph-tab" aria-pressed="true">Aggressive</button>
+          <button class="ph-tab" aria-pressed="false">Defensive</button>
+          <button class="ph-tab" disabled>Coward</button>
+        </div>
+        <code>.ph-tabs  .ph-tab</code>
+        <code>[aria-pressed]  :disabled</code>
+      </div>
+      <div class="spec">
+        <div class="ph-tabs ph-tabs--row">
+          <button class="ph-tab" aria-pressed="false">Easy</button>
+          <button class="ph-tab" aria-pressed="true">Normal</button>
+          <button class="ph-tab" aria-pressed="false">Hard</button>
+        </div>
+        <code>.ph-tabs--row</code>
+      </div>
+      <div class="spec spec--wide">
+        <div>
+          <div class="ph-tablist" role="tablist" aria-label="Character records">
+            <button role="tab" id="tab-perks" aria-controls="panel-perks" aria-selected="true">Perks</button>
+            <button role="tab" id="tab-karma" aria-controls="panel-karma" aria-selected="false" tabindex="-1">Karma</button>
+            <button role="tab" id="tab-kills" aria-controls="panel-kills" aria-selected="false" tabindex="-1">Kills</button>
+          </div>
+          <div class="ph-paper" role="tabpanel" id="panel-perks" aria-labelledby="tab-perks"><p>Awareness: you see the hit points and weapon of anyone you look at.</p></div>
+          <div class="ph-paper" role="tabpanel" id="panel-karma" aria-labelledby="tab-karma" hidden><p>Karma 250. The people of Dry Creek call you a defender.</p></div>
+          <div class="ph-paper" role="tabpanel" id="panel-kills" aria-labelledby="tab-kills" hidden><p>Scorpions 6. Raiders 3. Rats 11.</p></div>
+        </div>
+        <code>.ph-tablist  [role="tab"]  (panels are .ph-paper)</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="form-title">
+    <h2 class="ph-label" id="form-title" style="font-size: 1.75rem">Form</h2>
+    <div class="specimens">
+      <div class="spec" style="justify-items: stretch">
+        <label class="ph-field"><span class="ph-label">Name</span><input class="ph-input" placeholder="Wanderer"></label>
+        <label class="ph-field"><span class="ph-label">Bunker</span><input class="ph-input" value="9"></label>
+        <code>.ph-field  .ph-input</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <label class="ph-field"><span class="ph-label">Locked</span><input class="ph-input" value="Access denied" disabled></label>
+        <code>.ph-input:disabled</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <label class="ph-field"><span class="ph-label">Music volume</span><input class="ph-slider" id="volume" type="range" value="60"></label>
+        <output class="ph-value" for="volume" id="volume-out">60%</output>
+        <code>.ph-slider  .ph-value</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <label class="ph-field"><span class="ph-label">Save file</span><input class="ph-input" type="file"></label>
+        <code>.ph-input[type="file"]</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="choice-title">
+    <h2 class="ph-label" id="choice-title" style="font-size: 1.75rem">Choices</h2>
+    <div class="specimens">
+      <div class="spec">
+        <label class="ph-choice"><input class="ph-check" type="checkbox" checked><span>Small Guns</span></label>
+        <label class="ph-choice"><input class="ph-check" type="checkbox"><span>Lockpick</span></label>
+        <label class="ph-choice"><input class="ph-check" type="checkbox" disabled><span>Gambling</span></label>
+        <code>.ph-choice  .ph-check (checkbox)</code>
+      </div>
+      <fieldset class="ph-fieldset spec">
+        <legend>Gender</legend>
+        <label class="ph-choice"><input class="ph-check" type="radio" name="gender" checked><span>Male</span></label>
+        <label class="ph-choice"><input class="ph-check" type="radio" name="gender"><span>Female</span></label>
+        <code>.ph-fieldset  .ph-check (radio)</code>
+      </fieldset>
+      <div class="spec" style="justify-items: stretch">
+        <label class="ph-field">
+          <span class="ph-label">Weapon</span>
+          <select class="ph-select">
+            <option>10mm pistol</option>
+            <option>Hunting rifle</option>
+            <option>Spear</option>
+          </select>
+        </label>
+        <code>.ph-select</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <label class="ph-field"><span class="ph-label">Notes</span><textarea class="ph-input" placeholder="Remember the purifier part."></textarea></label>
+        <code>textarea.ph-input</code>
+      </div>
+      <div class="spec">
+        <label class="ph-choice"><input class="ph-switch" type="checkbox" role="switch" checked><span>Combat taunts</span></label>
+        <label class="ph-choice"><input class="ph-switch" type="checkbox" role="switch"><span>Always run</span></label>
+        <code>.ph-switch</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="input-title">
+    <h2 class="ph-label" id="input-title" style="font-size: 1.75rem">More inputs</h2>
+    <div class="specimens">
+      <div class="spec">
+        <span class="ph-label" id="caps-label">Caps to give</span>
+        <div class="ph-number" role="group" aria-labelledby="caps-label">
+          <button class="ph-button ph-button--icon" data-number-step="-1" aria-label="Fewer caps"><span class="ph-icon ph-icon--minus" aria-hidden="true"></span></button>
+          <input class="ph-input" type="number" value="25" min="0" max="999" step="5" aria-labelledby="caps-label">
+          <button class="ph-button ph-button--icon" data-number-step="1" aria-label="More caps"><span class="ph-icon ph-icon--plus" aria-hidden="true"></span></button>
+        </div>
+        <code>.ph-number</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <label class="ph-field"><span class="ph-label">Search archives</span>
+          <span class="ph-search"><span class="ph-icon ph-icon--search" aria-hidden="true"></span><input class="ph-input" type="search" placeholder="Purifier part"></span>
+        </label>
+        <code>.ph-search</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <label class="ph-field"><span class="ph-label">Destination</span><input class="ph-input" list="places" placeholder="Start typing"></label>
+        <datalist id="places">
+          <option value="Dry Creek"></option>
+          <option value="Scrap Hollow"></option>
+          <option value="Crossroads"></option>
+          <option value="Hollowstone"></option>
+          <option value="The Rustyard"></option>
+        </datalist>
+        <code>.ph-input[list] + datalist</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <label class="ph-field"><span class="ph-label">Departure</span><input class="ph-input" type="date" value="2161-12-05"></label>
+        <code>.ph-input[type="date"]</code>
+      </div>
+      <div class="spec">
+        <div class="ph-row" style="gap: 10px">
+          <span class="ph-chip">Small Guns<button aria-label="Remove Small Guns"><span class="ph-icon ph-icon--close" aria-hidden="true"></span></button></span>
+          <span class="ph-chip">Speech<button aria-label="Remove Speech"><span class="ph-icon ph-icon--close" aria-hidden="true"></span></button></span>
+          <span class="ph-chip">Lockpick<button aria-label="Remove Lockpick"><span class="ph-icon ph-icon--close" aria-hidden="true"></span></button></span>
+        </div>
+        <code>.ph-chip</code>
+      </div>
+      <fieldset class="ph-fieldset spec">
+        <legend>Reputation</legend>
+        <div class="ph-rating">
+          <input type="radio" name="reputation" aria-label="1 of 5">
+          <input type="radio" name="reputation" aria-label="2 of 5">
+          <input type="radio" name="reputation" aria-label="3 of 5" checked>
+          <input type="radio" name="reputation" aria-label="4 of 5">
+          <input type="radio" name="reputation" aria-label="5 of 5">
+        </div>
+        <code>.ph-rating</code>
+      </fieldset>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="data-title">
+    <h2 class="ph-label" id="data-title" style="font-size: 1.75rem">Data</h2>
+    <div class="specimens">
+      <div class="spec spec--wide">
+        <div class="ph-screen" style="overflow-x: auto">
+          <table class="ph-table">
+            <thead><tr><th scope="col">Item</th><th scope="col">Type</th><th scope="col" class="ph-num">Weight</th><th scope="col" class="ph-num">Value</th></tr></thead>
+            <tbody>
+              <tr><td>Medkit</td><td>Drug</td><td class="ph-num">0</td><td class="ph-num">$175</td></tr>
+              <tr aria-selected="true"><td>10mm pistol</td><td>Weapon</td><td class="ph-num">3</td><td class="ph-num">$250</td></tr>
+              <tr><td>Leather jacket</td><td>Armor</td><td class="ph-num">5</td><td class="ph-num">$250</td></tr>
+              <tr><td>Rope</td><td>Misc</td><td class="ph-num">10</td><td class="ph-num">$25</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <code>.ph-table  .ph-num  tr[aria-selected="true"]</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <label class="ph-field"><span class="ph-label">Loading</span><progress class="ph-progress" max="100" value="65">65%</progress></label>
+        <code>.ph-progress</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <span class="ph-label">Action points</span>
+        <meter class="ph-meter" min="0" max="10" low="3" high="7" optimum="10" value="8">8 of 10</meter>
+        <meter class="ph-meter" min="0" max="10" low="3" high="7" optimum="10" value="5">5 of 10</meter>
+        <meter class="ph-meter" min="0" max="10" low="3" high="7" optimum="10" value="2">2 of 10</meter>
+        <code>.ph-meter</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <details class="ph-details" open>
+          <summary>Find a purifier part</summary>
+          <p class="ph-screen" style="margin: 0">Bunker 9 has 150 days of water left.</p>
+        </details>
+        <details class="ph-details">
+          <summary>Rescue Mara</summary>
+          <p class="ph-screen" style="margin: 0">The raiders hold her in their camp.</p>
+        </details>
+        <code>.ph-details</code>
+      </div>
+      <div class="spec">
+        <span class="ph-row" style="gap: 10px; align-items: center"><span class="ph-tag">Quests</span><span class="ph-badge">3</span></span>
+        <code>.ph-badge</code>
+      </div>
+      <div class="spec">
+        <span class="ph-odometer" role="img" aria-label="32 percent"><span>0</span><span>3</span><span>2</span></span>
+        <code>.ph-odometer</code>
+      </div>
+      <div class="spec">
+        <span class="ph-label">Action points</span>
+        <meter class="ph-meter ph-meter--leds" style="--ph-leds: 10" min="0" max="10" value="7">7 of 10</meter>
+        <code>.ph-meter--leds  (--ph-leds: count)</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="container-title">
+    <h2 class="ph-label" id="container-title" style="font-size: 1.75rem">Containers</h2>
+    <div class="specimens">
+      <div class="spec spec--wide">
+        <header class="ph-appbar">
+          <button class="ph-button ph-button--icon" id="open-drawer" aria-label="Open menu"><span class="ph-icon ph-icon--menu" aria-hidden="true"></span></button>
+          <p class="ph-appbar__title">Bunker 9 terminal</p>
+          <button class="ph-button ph-button--key">Map</button>
+          <button class="ph-button ph-button--key">Quests</button>
+          <button class="ph-button ph-button--icon" aria-label="Settings"><span class="ph-icon ph-icon--gear" aria-hidden="true"></span></button>
+        </header>
+        <code>.ph-appbar  .ph-appbar__title  (the menu button opens .ph-drawer)</code>
+        <dialog class="ph-plate ph-drawer" id="drawer" aria-labelledby="drawer-title">
+          <form class="ph-stack" method="dialog">
+            <div class="ph-row" style="justify-content: space-between; align-items: center">
+              <h3 class="ph-label" id="drawer-title" style="font-size: 1.5rem">Archives</h3>
+              <button class="ph-button ph-button--icon" aria-label="Close menu"><span class="ph-icon ph-icon--close" aria-hidden="true"></span></button>
+            </div>
+            <button class="ph-button" style="justify-content: flex-start">Status</button>
+            <button class="ph-button" style="justify-content: flex-start">Automaps</button>
+            <button class="ph-button" style="justify-content: flex-start">Archives</button>
+          </form>
+        </dialog>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+      <article class="ph-plate ph-card">
+        <header class="ph-card__header">Awareness<span class="ph-badge">1</span></header>
+        <p style="margin: 0; font: 1.25rem/1.25 var(--ph-font-text)">You see the hit points and weapon of anyone you look at.</p>
+        <div class="ph-card__actions">
+          <button class="ph-button ph-button--key">Skip</button>
+          <button class="ph-button ph-button--key">Take perk</button>
+        </div>
+      </article>
+        <code>.ph-card  __header  __actions</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <ul class="ph-screen ph-list">
+          <li><span class="ph-icon ph-icon--plus" aria-hidden="true"></span><span>Medkit</span><span class="ph-list__meta">x2</span><small>Restores hit points</small></li>
+          <li><span class="ph-icon ph-icon--radiation" aria-hidden="true"></span><span>Rad-Flush</span><span class="ph-list__meta">x1</span><small>Removes radiation</small></li>
+          <li><span class="ph-icon ph-icon--file" aria-hidden="true"></span><span>Data tape</span><span class="ph-list__meta">x3</span><small>Bunker records</small></li>
+        </ul>
+        <code>.ph-list  .ph-list__meta  small</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <div class="ph-screen ph-empty">
+          <span class="ph-icon ph-icon--folder" aria-hidden="true"></span>
+          <p style="margin: 0">No data tapes yet. Find them in terminals.</p>
+          <button class="ph-button ph-button--key">Open map</button>
+        </div>
+        <code>.ph-screen.ph-empty</code>
+      </div>
+      <div class="spec spec--wide">
+        <footer class="ph-footer">
+          <span>Phosphor Industries. Built for the long night.</span>
+          <span><a href="#container-title">Terms</a> &nbsp; <a href="#container-title">Contact</a></span>
+        </footer>
+        <code>.ph-footer</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="feedback-title">
+    <h2 class="ph-label" id="feedback-title" style="font-size: 1.75rem">Feedback and display</h2>
+    <div class="specimens">
+      <div class="spec" style="justify-items: stretch">
+        <p class="ph-notice" style="margin: 0">Game saved.</p>
+        <p class="ph-notice ph-notice--warn" style="margin: 0">You are overloaded. You cannot run.</p>
+        <p class="ph-notice ph-notice--error" style="margin: 0">You are poisoned. Find an antidote.</p>
+        <code>.ph-notice  --warn  --error</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <div class="ph-screen ph-static" role="status">Please stand by</div>
+        <code>.ph-screen.ph-static</code>
+      </div>
+      <div class="spec">
+        <div class="ph-portrait" role="img" aria-label="Wanderer">WN</div>
+        <code>.ph-portrait</code>
+      </div>
+      <div class="spec spec--wide">
+        <ol class="ph-steps" aria-label="Character creation">
+          <li class="ph-done">Stats</li>
+          <li class="ph-done">Traits</li>
+          <li aria-current="step">Tag skills</li>
+          <li>Name</li>
+        </ol>
+        <code>.ph-steps  .ph-done  [aria-current="step"]</code>
+      </div>
+      <div class="spec">
+        <span class="ph-icon ph-icon--gear ph-spinner" role="status" aria-label="Loading"></span>
+        <code>.ph-spinner (on a gear icon)</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <div class="ph-screen ph-stack" style="gap: 8px" aria-hidden="true">
+          <span class="ph-skeleton" style="width: 70%"></span>
+          <span class="ph-skeleton" style="width: 90%"></span>
+          <span class="ph-skeleton" style="width: 50%"></span>
+        </div>
+        <code>.ph-skeleton</code>
+      </div>
+      <div class="spec">
+        <button class="ph-button" id="push-toast">Add message</button>
+        <code>.ph-toasts (stack of .ph-toast)</code>
+      </div>
+      <div class="spec spec--wide">
+        <div class="ph-banner"><span>A new version of the wrist terminal firmware is ready.</span><button class="ph-button ph-button--key">Install</button></div>
+        <code>.ph-banner</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <ol class="ph-screen ph-timeline">
+          <li><time datetime="2161-12-05">5 Dec 2161</time>Left Bunker 9.</li>
+          <li><time datetime="2161-12-19">19 Dec 2161</time>Reached Dry Creek.</li>
+          <li class="ph-dim"><time>Not done</time>Find a purifier part.</li>
+        </ol>
+        <code>.ph-timeline  li.ph-dim</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="overlay-title">
+    <h2 class="ph-label" id="overlay-title" style="font-size: 1.75rem">Menus and overlays</h2>
+    <div class="specimens">
+      <div class="spec">
+        <button class="ph-lamp" popovertarget="game-menu">Game menu</button>
+        <div class="ph-menu" id="game-menu" popover>
+          <button popovertarget="game-menu" popovertargetaction="hide">Save game</button>
+          <button popovertarget="game-menu" popovertargetaction="hide">Load game</button>
+          <button popovertarget="game-menu" popovertargetaction="hide">Preferences</button>
+          <button popovertarget="game-menu" popovertargetaction="hide">Exit</button>
+        </div>
+        <code>.ph-menu [popover]</code>
+      </div>
+      <div class="spec">
+        <button class="ph-lamp" data-ph-tooltip="Trade items with this person." aria-describedby="trade-tip">Trade</button>
+        <span id="trade-tip" hidden>Trade items with this person.</span>
+        <code>[data-ph-tooltip]  (Escape hides it)</code>
+      </div>
+      <div class="spec">
+        <button class="ph-lamp" id="open-quit">Quit game</button>
+        <dialog class="ph-plate ph-dialog" id="quit" aria-labelledby="quit-title">
+          <form class="ph-stack" method="dialog">
+            <p class="ph-label" id="quit-title" style="font-size: 1.5rem">Are you sure you want to quit?</p>
+            <div class="ph-row" style="justify-content: flex-end">
+              <button class="ph-button" value="no" autofocus>No</button>
+              <button class="ph-button ph-button--lamp" value="yes">Yes</button>
+            </div>
+          </form>
+        </dialog>
+        <code>.ph-dialog (dialog)</code>
+      </div>
+      <div class="spec">
+        <button class="ph-lamp" id="show-toast">Show message</button>
+        <div class="ph-toast" id="toast" popover="manual" role="status">You gain 150 experience points.</div>
+        <code>.ph-toast [popover]</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="stat-title">
+    <h2 class="ph-label" id="stat-title" style="font-size: 1.75rem">Stats</h2>
+    <div class="specimens">
+      <div class="spec">
+        <div class="ph-stat"><span class="ph-stat__name">ST</span><output class="ph-counter">06</output><span class="ph-stat__rank">Good</span><span class="ph-stepper"><button data-step="1" aria-label="Increase strength">+</button><button data-step="-1" aria-label="Decrease strength">−</button></span></div>
+        <code>.ph-stat  .ph-counter</code>
+        <code>.ph-stat__rank  .ph-stepper</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="action-title">
+    <h2 class="ph-label" id="action-title" style="font-size: 1.75rem">Actions</h2>
+    <div class="specimens">
+      <div class="spec">
+        <div class="ph-button-group" role="group" aria-label="Text size">
+          <button class="ph-button ph-button--key" aria-pressed="false">Small</button>
+          <button class="ph-button ph-button--key" aria-pressed="true">Medium</button>
+          <button class="ph-button ph-button--key" aria-pressed="false">Large</button>
+        </div>
+        <code>.ph-button-group</code>
+      </div>
+      <div class="spec">
+        <div class="ph-button-group">
+          <button class="ph-button">Save game</button>
+          <button class="ph-button ph-button--icon" popovertarget="save-menu" aria-label="More save options"><span class="ph-icon ph-icon--caret-down" aria-hidden="true"></span></button>
+        </div>
+        <div class="ph-menu" id="save-menu" popover>
+          <button popovertarget="save-menu" popovertargetaction="hide">Quick save</button>
+          <button popovertarget="save-menu" popovertargetaction="hide">Save as new</button>
+        </div>
+        <code>Split button: .ph-button-group + .ph-menu</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <div class="ph-screen" id="ctx-area" tabindex="0" style="min-height: 80px">Right-click here, or press the menu key.</div>
+        <div class="ph-menu ph-menu--at-pointer" id="ctx-menu" popover>
+          <button popovertarget="ctx-menu" popovertargetaction="hide">Look</button>
+          <button popovertarget="ctx-menu" popovertargetaction="hide">Talk</button>
+          <button popovertarget="ctx-menu" popovertargetaction="hide">Use skill</button>
+        </div>
+        <code>.ph-menu--at-pointer (context menu)</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <ul class="ph-screen ph-tree" aria-label="Archives">
+          <li>
+            <details open>
+              <summary><span class="ph-icon ph-icon--folder" aria-hidden="true"></span>Bunker records</summary>
+              <ul>
+                <li><a href="#action-title" aria-current="page"><span class="ph-icon ph-icon--file" aria-hidden="true"></span>Warden log</a></li>
+                <li><a href="#action-title"><span class="ph-icon ph-icon--file" aria-hidden="true"></span>Water reserves</a></li>
+              </ul>
+            </details>
+          </li>
+          <li>
+            <details>
+              <summary><span class="ph-icon ph-icon--folder" aria-hidden="true"></span>Data tapes</summary>
+              <ul>
+                <li><a href="#action-title"><span class="ph-icon ph-icon--file" aria-hidden="true"></span>Military base</a></li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+        <code>.ph-tree (details + summary)</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="layout-title">
+    <h2 class="ph-label" id="layout-title" style="font-size: 1.75rem">Page</h2>
+    <div class="specimens">
+      <div class="spec">
+        <nav class="ph-nav" aria-label="Example nav">
+          <a class="ph-tag" href="#layout-title" aria-current="page">Here</a>
+          <a class="ph-tag" href="#layout-title">There</a>
+        </nav>
+        <code>.ph-nav  a.ph-tag</code>
+      </div>
+      <div class="spec">
+        <nav aria-label="Breadcrumb">
+          <ol class="ph-breadcrumbs">
+            <li><a href="#layout-title">World map</a></li>
+            <li><a href="#layout-title">Dry Creek</a></li>
+            <li aria-current="page">Town hall</li>
+          </ol>
+        </nav>
+        <code>.ph-breadcrumbs</code>
+      </div>
+      <div class="spec">
+        <nav aria-label="Pages of results">
+          <ul class="ph-pagination">
+            <li><a href="#layout-title" aria-label="Previous page">&lt;</a></li>
+            <li><a href="#layout-title">1</a></li>
+            <li><a href="#layout-title" aria-current="page">2</a></li>
+            <li><a href="#layout-title">3</a></li>
+            <li><a href="#layout-title" aria-label="Next page">&gt;</a></li>
+          </ul>
+        </nav>
+        <code>.ph-pagination</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <hr class="ph-divider">
+        <code>.ph-divider</code>
+      </div>
+      <div class="spec">
+        <code>.ph-chassis</code>
+        <code>Page background (this page)</code>
+      </div>
+      <div class="spec">
+        <code>.ph-crt</code>
+        <code>Soft blur, like an old CRT</code>
+      </div>
+      <div class="spec">
+        <code>.ph-stack  .ph-row</code>
+        <code>Vertical and wrapping layouts</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="prose-title">
+    <h2 class="ph-label" id="prose-title" style="font-size: 1.75rem">Prose</h2>
+    <div class="specimens">
+      <div class="spec spec--wide">
+        <div class="ph-prose">
+          <h2>Field notes from the wasteland</h2>
+          <p>Leave the bunker at dawn and walk east. The <a href="#prose-title">Dry Creek</a> guards let you in if you keep your weapon away. Press <kbd>I</kbd> to open your inventory and <kbd>Esc</kbd> to close it.</p>
+          <blockquote>Elder Rhee: Strangers bring trouble. Tell me why you came here.</blockquote>
+          <h3>What to carry</h3>
+          <ul>
+            <li>Two medkits for the scorpions</li>
+            <li>Rope for the caves</li>
+            <li>A canteen</li>
+          </ul>
+          <hr>
+          <p>If the game has no music, check the music path in <code>game.cfg</code>:</p>
+          <pre><code>[sound]
+music_path1=data\sound\music\</code></pre>
+        </div>
+        <code>.ph-prose  (h1-h3, p, a, kbd, blockquote, ul, ol, hr, code, pre)</code>
+      </div>
+    </div>
+  </section>
+
+  <section class="ph-plate ph-stack" aria-labelledby="web-title">
+    <h2 class="ph-label" id="web-title" style="font-size: 1.75rem">Web patterns</h2>
+    <div class="specimens">
+      <div class="spec" style="justify-items: stretch">
+        <article class="ph-paper ph-paper--aged"><h3>Strength</h3><p>Raw physical strength. A high Strength is good for physical characters.</p></article>
+        <code>.ph-paper--aged</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <article class="ph-paper ph-paper--aged ph-stack" style="gap: 10px">
+          <div class="ph-frame" style="aspect-ratio: 16 / 10"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 40' shape-rendering='crispEdges'><rect width='64' height='40' fill='%23c49064'/><rect y='14' width='64' height='8' fill='%23a05c38'/><rect x='44' y='5' width='6' height='6' fill='%23fce4b8'/><path d='M0 26h10v-6h8v6h6v-9h12v9h28v14H0z' fill='%2348241c'/><rect y='31' width='64' height='9' fill='%23604008'/><path d='M52 31v-12h1v12zM56 31v-12h1v12zM51 17h7v3h-7z' fill='%2318100c'/></svg>" alt="Mesa and water tower at dusk"></div>
+          <h3>Dry Creek</h3>
+          <p>A small farming town behind a wall of tires.</p>
+        </article>
+        <code>Card with media: .ph-paper + .ph-frame</code>
+      </div>
+      <div class="spec">
+        <div class="ph-row" style="gap: 28px; align-items: center">
+          <span class="ph-badged"><span class="ph-frame" style="width: 72px; height: 72px; font: 2rem var(--ph-font-text)" role="img" aria-label="Wanderer, 3 messages">WN</span><span class="ph-badge" aria-hidden="true">3</span></span>
+          <span class="ph-badged"><button class="ph-button ph-button--icon" aria-label="Inventory, 12 items"><span class="ph-icon ph-icon--folder" aria-hidden="true"></span></button><span class="ph-badge ph-badge--info" aria-hidden="true">12</span></span>
+        </div>
+        <code>.ph-frame  .ph-badged  .ph-badge--info</code>
+      </div>
+      <fieldset class="ph-fieldset spec spec--wide">
+        <legend>Choose a background</legend>
+        <div class="ph-row" style="gap: 16px">
+          <label class="ph-tile"><input class="ph-sr-only" type="radio" name="background" checked><span class="ph-label">Wanderer</span><span>Balanced skills. Starts with a knife.</span></label>
+          <label class="ph-tile"><input class="ph-sr-only" type="radio" name="background"><span class="ph-label">Merchant</span><span>Better prices. Starts with 300 caps.</span></label>
+          <label class="ph-tile"><input class="ph-sr-only" type="radio" name="background"><span class="ph-label">Raider</span><span>Tough in a fight. Bad reputation.</span></label>
+        </div>
+        <code>.ph-tile  (selected: :checked, aria-selected or aria-pressed)  .ph-sr-only</code>
+      </fieldset>
+      <div class="spec" style="justify-items: stretch">
+        <label class="ph-dropzone">
+          <span class="ph-engraved">Drop a save file</span>
+          <span data-file-name>or click to choose one</span>
+          <input type="file">
+        </label>
+        <code>.ph-dropzone  [data-dragover]</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <ul class="ph-screen ph-readout ph-scroll" style="max-height: 140px" tabindex="0" aria-label="All skills">
+          <li>Small Guns <span>62%</span></li><li>Big Guns <span>37%</span></li><li>Energy Weapons <span>17%</span></li>
+          <li>Melee Weapons <span>63%</span></li><li>Throwing <span>47%</span></li><li>First Aid <span>43%</span></li>
+          <li>Doctor <span>19%</span></li><li>Sneak <span>32%</span></li><li>Lockpick <span>25%</span></li>
+          <li>Steal <span>27%</span></li><li>Traps <span>25%</span></li><li>Science <span>33%</span></li>
+        </ul>
+        <code>.ph-scroll</code>
+      </div>
+      <div class="spec spec--wide">
+        <div>
+          <div class="ph-tablist ph-tablist--metal" role="tablist" aria-label="Character records">
+            <button role="tab" id="mtab-perks" aria-controls="mpanel-perks" aria-selected="true">Perks</button>
+            <button role="tab" id="mtab-karma" aria-controls="mpanel-karma" aria-selected="false" tabindex="-1">Karma</button>
+            <button role="tab" id="mtab-kills" aria-controls="mpanel-kills" aria-selected="false" tabindex="-1">Kills</button>
+          </div>
+          <div class="ph-screen" role="tabpanel" id="mpanel-perks" aria-labelledby="mtab-perks">
+            <p style="margin: 0 0 8px">Awareness</p>
+            <p class="ph-divider-label">Traits</p>
+            <p style="margin: 8px 0 0">Heavy Handed<br>Bruiser</p>
+          </div>
+          <div class="ph-screen" role="tabpanel" id="mpanel-karma" aria-labelledby="mtab-karma" hidden><p style="margin: 0">Karma 250. Defender of Dry Creek.</p></div>
+          <div class="ph-screen" role="tabpanel" id="mpanel-kills" aria-labelledby="mtab-kills" hidden><p style="margin: 0">Scorpions 6. Raiders 3.</p></div>
+        </div>
+        <code>.ph-tablist--metal  .ph-divider-label</code>
+      </div>
+      <div class="spec">
+        <span class="ph-counter-bar">Skill points <span class="ph-odometer" role="img" aria-label="0"><span>0</span><span>0</span></span></span>
+        <span class="ph-counter-bar">Tag skills <span class="ph-odometer" role="img" aria-label="3"><span>0</span><span>3</span></span></span>
+        <code>.ph-counter-bar</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <ul class="ph-screen ph-checklist" aria-label="Optional traits">
+          <li><label><input class="ph-check" type="checkbox"><span>Fast Metabolism</span></label></li>
+          <li><label><input class="ph-check" type="checkbox" checked><span>Bruiser</span></label></li>
+          <li><label><input class="ph-check" type="checkbox"><span>Small Frame</span></label></li>
+          <li><label><input class="ph-check" type="checkbox" checked><span>Heavy Handed</span></label></li>
+        </ul>
+        <code>.ph-checklist</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <nav class="ph-plate ph-sidemenu" aria-label="Main menu example">
+          <a class="ph-button ph-button--lamp" href="#web-title" aria-current="page">New game</a>
+          <a class="ph-button ph-button--lamp" href="#web-title">Load game</a>
+          <a class="ph-button ph-button--lamp" href="#web-title">Options</a>
+          <a class="ph-button ph-button--lamp" href="#web-title">Exit</a>
+        </nav>
+        <code>.ph-sidemenu  [aria-current="page"]</code>
+      </div>
+      <div class="spec">
+        <button class="ph-fab" aria-label="New note"><span class="ph-icon ph-icon--plus" aria-hidden="true"></span></button>
+        <code>.ph-fab</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <p class="ph-notice ph-notice--info" style="margin: 0">The Crossroads caravan leaves at dawn.</p>
+        <span class="ph-tag ph-tag--info" style="justify-self: start">Skills</span>
+        <code>--ph-info  .ph-notice--info  .ph-tag--info</code>
+      </div>
+      <div class="spec spec--wide">
+        <div class="ph-plate ph-plate--rusty ph-row" style="gap: 32px; padding: 24px">
+          <p class="ph-engraved">Armor</p>
+          <p class="ph-engraved">Item 1</p>
+          <p class="ph-engraved">Item 2</p>
+        </div>
+        <code>.ph-plate--rusty  .ph-engraved</code>
+      </div>
+      <div class="spec" style="justify-items: stretch">
+        <div class="ph-screen ph-cursor" style="min-height: 80px">Move the pointer here to see the pixel cursor.</div>
+        <code>.ph-cursor  (put it on body for the whole page)</code>
+      </div>
+    </div>
+  </section>
+
+  <h2 class="ph-label" id="examples-title" style="font-size: 2rem; margin-top: 12px">Examples</h2>
+
+  <div class="ph-row" style="gap: 20px">
+    <section class="ph-plate skillboard" aria-labelledby="skillboard-title">
+      <h3 class="ph-tag" id="skillboard-title" style="margin: 0">Skills</h3>
+      <ul class="skillboard__list">
+        <li><button class="ph-button">Sneak</button><span class="ph-odometer" role="img" aria-label="32 percent"><span>0</span><span>3</span><span>2</span></span><span class="ph-label">%</span></li>
+        <li><button class="ph-button">Lockpick</button><span class="ph-odometer" role="img" aria-label="25 percent"><span>0</span><span>2</span><span>5</span></span><span class="ph-label">%</span></li>
+        <li><button class="ph-button">Steal</button><span class="ph-odometer" role="img" aria-label="27 percent"><span>0</span><span>2</span><span>7</span></span><span class="ph-label">%</span></li>
+        <li><button class="ph-button">First aid</button><span class="ph-odometer" role="img" aria-label="34 percent"><span>0</span><span>3</span><span>4</span></span><span class="ph-label">%</span></li>
+        <li><button class="ph-button">Repair</button><span class="ph-odometer" role="img" aria-label="24 percent"><span>0</span><span>2</span><span>4</span></span><span class="ph-label">%</span></li>
+      </ul>
+      <button class="ph-button ph-button--lamp">Cancel</button>
+    </section>
+
+    <section class="ph-plate hud" aria-label="Status bar">
+      <div class="ph-screen hud__log">
+        <p style="margin: 0">You see a giant scorpion.</p>
+        <p style="margin: 0">You were hit for 4 points of damage.</p>
+        <p style="margin: 0" class="ph-alert">You are poisoned.</p>
+      </div>
+      <div class="ph-stack" style="gap: 10px">
+        <meter class="ph-meter ph-meter--leds" style="--ph-leds: 10" min="0" max="10" value="3">3 of 10 action points</meter>
+        <div class="ph-row" style="gap: 14px; align-items: center">
+          <span class="ph-label">HP</span><span class="ph-odometer" role="img" aria-label="43 hit points"><span>0</span><span>4</span><span>3</span></span>
+          <span class="ph-label">AC</span><span class="ph-odometer" role="img" aria-label="Armor class 7"><span>0</span><span>0</span><span>7</span></span>
+        </div>
+        <div class="ph-row" style="gap: 6px">
+          <button class="ph-button ph-button--key">Inv</button>
+          <button class="ph-button ph-button--key">Map</button>
+          <button class="ph-button ph-button--key">Cha</button>
+          <button class="ph-button ph-button--key">Pip</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="ph-plate console" aria-label="Dialog">
+    <div class="ph-grille">Who's there? State your name.</div>
+    <div class="ph-stack console__left">
+      <div class="ph-screen">$764</div>
+      <div class="ph-vent"></div>
+      <button class="ph-hazard">Review</button>
+    </div>
+    <div class="ph-screen ph-screen--bulge console__options">
+      <ul class="ph-options">
+        <li><button>Just a traveler. Everything is fine.</button></li>
+        <li><button>Kkzzt... say again... you are breaking up. Over.</button></li>
+        <li><button>I'm looking for work, not trouble.</button></li>
+        <li><button>Patrol Seven, reporting in.</button></li>
+      </ul>
+    </div>
+    <div class="ph-stack console__right">
+      <button class="ph-lamp ph-lamp--stack">Barter</button>
+      <div class="ph-vent"></div>
+    </div>
+  </section>
+
+  <section class="ph-plate sheet" aria-label="Character sheet">
+    <div class="sheet__head">
+      <span class="ph-tag">None</span>
+      <span class="ph-tag">Age 25</span>
+      <span class="ph-tag">Male</span>
+    </div>
+
+    <div class="ph-stack" style="gap: 6px">
+      <div class="ph-stat"><span class="ph-stat__name">ST</span><output class="ph-counter">06</output><span class="ph-stat__rank">Good</span><span class="ph-stepper"><button data-step="1" aria-label="Increase strength">+</button><button data-step="-1" aria-label="Decrease strength">−</button></span></div>
+      <div class="ph-stat"><span class="ph-stat__name">PE</span><output class="ph-counter">05</output><span class="ph-stat__rank">Avrg</span><span class="ph-stepper"><button data-step="1" aria-label="Increase perception">+</button><button data-step="-1" aria-label="Decrease perception">−</button></span></div>
+      <div class="ph-stat"><span class="ph-stat__name">EN</span><output class="ph-counter">07</output><span class="ph-stat__rank">V.Good</span><span class="ph-stepper"><button data-step="1" aria-label="Increase endurance">+</button><button data-step="-1" aria-label="Decrease endurance">−</button></span></div>
+      <div class="ph-stat"><span class="ph-stat__name">CH</span><output class="ph-counter">04</output><span class="ph-stat__rank">Fair</span><span class="ph-stepper"><button data-step="1" aria-label="Increase charisma">+</button><button data-step="-1" aria-label="Decrease charisma">−</button></span></div>
+      <div class="ph-stat"><span class="ph-stat__name">IN</span><output class="ph-counter">08</output><span class="ph-stat__rank">Great</span><span class="ph-stepper"><button data-step="1" aria-label="Increase intelligence">+</button><button data-step="-1" aria-label="Decrease intelligence">−</button></span></div>
+      <div class="ph-stat"><span class="ph-stat__name">AG</span><output class="ph-counter">06</output><span class="ph-stat__rank">Good</span><span class="ph-stepper"><button data-step="1" aria-label="Increase agility">+</button><button data-step="-1" aria-label="Decrease agility">−</button></span></div>
+      <div class="ph-stat"><span class="ph-stat__name">LK</span><output class="ph-counter">05</output><span class="ph-stat__rank">Avrg</span><span class="ph-stepper"><button data-step="1" aria-label="Increase luck">+</button><button data-step="-1" aria-label="Decrease luck">−</button></span></div>
+    </div>
+
+    <div class="ph-stack">
+      <ul class="ph-screen ph-readout">
+        <li>Hit Points <span>30/30</span></li>
+        <li class="ph-dim">Poisoned</li>
+        <li class="ph-dim">Radiated</li>
+        <li class="ph-dim">Eye Damage</li>
+        <li class="ph-dim">Crippled Right Arm</li>
+      </ul>
+      <ul class="ph-screen ph-readout">
+        <li>Armor Class <span>5</span></li>
+        <li>Action Points <span>7</span></li>
+        <li>Carry Weight <span>150</span></li>
+        <li>Melee Damage <span>1</span></li>
+        <li>Sequence <span>10</span></li>
+      </ul>
+    </div>
+
+    <div class="ph-stack">
+      <h2 class="ph-label" style="margin: 0">Skills</h2>
+      <ul class="ph-screen ph-readout">
+        <li>Small Guns <span>25%</span></li>
+        <li>First Aid <span>20%</span></li>
+        <li>Lockpick <span>20%</span></li>
+        <li aria-current="true">Speech <span>25%</span></li>
+        <li>Barter <span>20%</span></li>
+      </ul>
+      <article class="ph-paper">
+        <h3>Speech</h3>
+        <p>The ability to communicate in a practical and efficient manner. The skill of convincing others that your position is correct.</p>
+      </article>
+    </div>
+
+    <div class="sheet__foot">
+      <button class="ph-button">Options</button>
+      <button class="ph-button ph-button--lamp">Done</button>
+      <button class="ph-button">Cancel</button>
+    </div>
+  </section>
+
+  <section class="ph-plate" aria-label="Combat control">
+    <div class="ph-row">
+      <div class="ph-stack">
+        <div class="ph-grille" style="box-sizing: border-box; min-width: min(12em, 100%)">&lt;None&gt;</div>
+        <button class="ph-lamp" style="color: var(--ph-bone)">Use best weapon</button>
+        <button class="ph-lamp" style="color: var(--ph-bone)">Use best armor</button>
+      </div>
+      <div class="ph-stack" style="gap: 8px">
+        <h2 class="ph-label" style="margin: 0">Disposition</h2>
+        <div class="ph-tabs">
+          <button class="ph-tab" aria-pressed="false">Berserk</button>
+          <button class="ph-tab" aria-pressed="true">Aggressive</button>
+          <button class="ph-tab" aria-pressed="false">Defensive</button>
+          <button class="ph-tab" disabled>Coward</button>
+          <button class="ph-tab" aria-pressed="false">Custom</button>
+        </div>
+      </div>
+      <div class="ph-stack" style="gap: 24px">
+        <button class="ph-lamp ph-lamp--stack">Talk</button>
+        <button class="ph-lamp ph-lamp--stack">Trade</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+<div class="ph-toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+  const RANKS = ["V.Bad", "Bad", "Poor", "Fair", "Avrg", "Good", "V.Good", "Great", "Exc", "Heroic"];
+
+  document.querySelectorAll(".ph-stat").forEach((stat) => {
+    const counter = stat.querySelector(".ph-counter");
+    const rank = stat.querySelector(".ph-stat__rank");
+    stat.querySelectorAll("[data-step]").forEach((button) => button.addEventListener("click", () => {
+      const value = Math.min(10, Math.max(1, Number(counter.value) + Number(button.dataset.step)));
+      counter.value = String(value).padStart(2, "0");
+      rank.textContent = RANKS[value - 1];
+    }));
+  });
+
+  document.querySelectorAll(".ph-tabs").forEach((group) => group.addEventListener("click", (event) => {
+    const tab = event.target.closest(".ph-tab");
+    if (!tab) return;
+    group.querySelectorAll(".ph-tab:not(:disabled)").forEach((t) => t.setAttribute("aria-pressed", t === tab));
+  }));
+
+  document.querySelectorAll(".ph-toggle").forEach((lamp) => lamp.addEventListener("click", () => {
+    lamp.setAttribute("aria-pressed", lamp.getAttribute("aria-pressed") !== "true");
+  }));
+
+  const volume = document.getElementById("volume");
+  volume.addEventListener("input", () => document.getElementById("volume-out").textContent = `${volume.value}%`);
+
+  document.querySelectorAll(".ph-tablist").forEach((list) => {
+    const tabs = [...list.querySelectorAll('[role="tab"]')];
+    const select = (tab) => {
+      tabs.forEach((t) => {
+        const selected = t === tab;
+        t.setAttribute("aria-selected", selected);
+        t.tabIndex = selected ? 0 : -1;
+        document.getElementById(t.getAttribute("aria-controls")).hidden = !selected;
+      });
+      tab.focus();
+    };
+    list.addEventListener("click", (event) => {
+      const tab = event.target.closest('[role="tab"]');
+      if (tab) select(tab);
+    });
+    list.addEventListener("keydown", (event) => {
+      const step = { ArrowRight: 1, ArrowLeft: -1 }[event.key];
+      if (!step) return;
+      const current = tabs.indexOf(document.activeElement);
+      select(tabs[(current + step + tabs.length) % tabs.length]);
+    });
+  });
+
+  document.querySelectorAll(".ph-number").forEach((group) => {
+    const input = group.querySelector("input");
+    group.querySelectorAll("[data-number-step]").forEach((button) => button.addEventListener("click", () => {
+      Number(button.dataset.numberStep) > 0 ? input.stepUp() : input.stepDown();
+    }));
+  });
+
+  document.querySelectorAll(".ph-chip button").forEach((button) => button.addEventListener("click", () => button.closest(".ph-chip").remove()));
+
+  document.querySelectorAll(".ph-button-group[role=group]").forEach((group) => group.addEventListener("click", (event) => {
+    const pressed = event.target.closest(".ph-button");
+    if (!pressed) return;
+    group.querySelectorAll(".ph-button").forEach((b) => b.setAttribute("aria-pressed", b === pressed));
+  }));
+
+  const drawer = document.getElementById("drawer");
+  document.getElementById("open-drawer").addEventListener("click", () => drawer.showModal());
+
+  const MESSAGES = ["You found 12 caps.", "You gain 50 experience points.", "Your Lockpick skill is now 30%.", "Night falls on the wasteland."];
+  let messageIndex = 0;
+  document.getElementById("push-toast").addEventListener("click", () => {
+    const toast = Object.assign(document.createElement("div"), { className: "ph-toast", textContent: MESSAGES[messageIndex++ % MESSAGES.length] });
+    document.getElementById("toasts").append(toast);
+    setTimeout(() => toast.remove(), 4000);
+  });
+
+  const ctxArea = document.getElementById("ctx-area");
+  const ctxMenu = document.getElementById("ctx-menu");
+  ctxArea.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+    const fromKeyboard = event.clientX === 0 && event.clientY === 0;
+    const box = ctxArea.getBoundingClientRect();
+    ctxMenu.style.setProperty("--ph-x", `${fromKeyboard ? box.left + 16 : event.clientX}px`);
+    ctxMenu.style.setProperty("--ph-y", `${fromKeyboard ? box.top + 16 : event.clientY}px`);
+    if (!ctxMenu.matches(":popover-open")) ctxMenu.showPopover();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    document.querySelectorAll("[data-ph-tooltip]:hover, [data-ph-tooltip]:focus-visible").forEach((el) => el.classList.add("ph-tooltip-dismissed"));
+  });
+  document.querySelectorAll("[data-ph-tooltip]").forEach((el) => {
+    const reset = () => el.classList.remove("ph-tooltip-dismissed");
+    el.addEventListener("mouseleave", reset);
+    el.addEventListener("blur", reset);
+  });
+
+  document.querySelectorAll(".ph-dropzone").forEach((zone) => {
+    const input = zone.querySelector("input[type=file]");
+    const name = zone.querySelector("[data-file-name]");
+    ["dragenter", "dragover"].forEach((type) => zone.addEventListener(type, () => zone.setAttribute("data-dragover", "")));
+    ["dragleave", "drop"].forEach((type) => zone.addEventListener(type, () => zone.removeAttribute("data-dragover")));
+    const hint = name.textContent;
+    input.addEventListener("change", () => name.textContent = input.files.length ? [...input.files].map((file) => file.name).join(", ") : hint);
+  });
+
+  const quit = document.getElementById("quit");
+  document.getElementById("open-quit").addEventListener("click", () => quit.showModal());
+
+  const toast = document.getElementById("toast");
+  let toastTimer;
+  document.getElementById("show-toast").addEventListener("click", () => {
+    if (!toast.matches(":popover-open")) toast.showPopover();
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.hidePopover(), 3000);
+  });
+
+  const rootStyle = getComputedStyle(document.documentElement);
+  document.querySelectorAll(".chip").forEach((chip) => {
+    chip.querySelector("span:last-child").textContent = `${rootStyle.getPropertyValue(chip.dataset.token).trim()} index ${chip.dataset.index}`;
+  });
+</script>
+</body>
+</html>

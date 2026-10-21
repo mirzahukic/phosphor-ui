@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Warden Terminal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Francois+One&family=VT323&display=swap">
+  <link rel="stylesheet" href="../phosphor.css">
+  <style>
+    main { max-width: 760px; margin: 0 auto; display: grid; gap: 20px; }
+    .terminal { display: grid; grid-template-columns: 1fr 200px; gap: 24px; align-items: start; }
+    .boot { list-style: none; margin: 0 0 12px; padding: 0; min-height: 7.2em; }
+    .boot li { opacity: 0; animation: boot-line 0s calc(var(--i) * 350ms) forwards; }
+    @keyframes boot-line { to { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { .boot li { opacity: 1; animation: none; } }
+    .note { transform: rotate(2deg); margin-top: 36px; }
+    .note p + p { margin-top: 8px; }
+    .side { justify-items: center; }
+    @media (max-width: 640px) {
+      .terminal { grid-template-columns: 1fr; }
+      .note { transform: none; margin-top: 0; }
+    }
+  </style>
+</head>
+<body class="ph-chassis">
+<main class="ph-crt">
+  <nav class="ph-nav" aria-label="Pages">
+    <a class="ph-tag" href="index.html">Kit</a>
+    <a class="ph-tag" href="login.html" aria-current="page">Login</a>
+    <a class="ph-tag" href="barter.html">Barter</a>
+    <a class="ph-tag" href="options.html">Options</a>
+    <a class="ph-tag" href="bulletin.html">Bulletin</a>
+  </nav>
+
+  <section class="ph-plate terminal" aria-labelledby="terminal-title">
+    <form class="ph-stack" id="login" novalidate>
+      <h1 class="ph-label" id="terminal-title" style="font-size: 1.75rem">Warden terminal</h1>
+      <div class="ph-screen">
+        <ul class="boot">
+          <li style="--i: 1">Bunker 9 central computer</li>
+          <li style="--i: 2">Memory check ... 640K OK</li>
+          <li style="--i: 3" class="ph-alert">Water purifier status: failing</li>
+          <li style="--i: 4">Water reserves: 150 days</li>
+          <li style="--i: 5">Enter your name and password.</li>
+        </ul>
+        <p id="status" role="status" aria-live="polite" style="margin: 0; min-height: 1.2em"></p>
+      </div>
+      <label class="ph-field">
+        <span class="ph-label">Name</span>
+        <input class="ph-input" name="name" autocomplete="username" placeholder="Wanderer">
+      </label>
+      <label class="ph-field">
+        <span class="ph-label">Password</span>
+        <input class="ph-input" name="password" type="password" autocomplete="current-password">
+      </label>
+      <div class="ph-row" style="justify-content: flex-end">
+        <button class="ph-button" type="reset">Clear</button>
+        <button class="ph-button ph-button--lamp" type="submit">Log in</button>
+      </div>
+    </form>
+
+    <div class="ph-stack side">
+      <article class="ph-paper note">
+        <h2>Note</h2>
+        <p>New password is warden. Do not tell the others.</p>
+        <p>— Jacoren</p>
+      </article>
+      <div class="ph-vent"></div>
+      <div class="ph-vent"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+  const PASSWORD = "warden";
+  const MAX_ATTEMPTS = 3;
+  const form = document.getElementById("login");
+  const status = document.getElementById("status");
+  let attemptsLeft = MAX_ATTEMPTS;
+
+  const show = (text, isAlert, field) => {
+    status.textContent = text;
+    status.classList.toggle("ph-alert", isAlert);
+    form.querySelectorAll(".ph-input").forEach((input) => {
+      input.toggleAttribute("aria-invalid", input === field);
+      if (input === field) input.setAttribute("aria-describedby", "status");
+      else input.removeAttribute("aria-describedby");
+    });
+  };
+
+  form.addEventListener("reset", () => show("", false));
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const name = form.elements.name.value.trim();
+    const password = form.elements.password.value;
+    if (!name) return show("Enter your name.", true, form.elements.name);
+    if (!password) return show("Enter your password.", true, form.elements.password);
+    if (password.toLowerCase() === PASSWORD) {
+      form.querySelectorAll("input, button").forEach((control) => control.disabled = true);
+      return show(`Welcome, ${name}. Find a purifier part.`, false);
+    }
+    attemptsLeft -= 1;
+    form.elements.password.value = "";
+    if (attemptsLeft > 0) return show(`Access denied. ${attemptsLeft} ${attemptsLeft === 1 ? "attempt" : "attempts"} left.`, true, form.elements.password);
+    form.querySelectorAll("input, button").forEach((control) => control.disabled = true);
+    show("Terminal locked. Contact the Warden.", true);
+  });
+</script>
+</body>
+</html>

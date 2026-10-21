@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hollowstone Restored</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Francois+One&family=VT323&display=swap">
+  <link rel="stylesheet" href="../phosphor.css">
+  <style>
+    main { max-width: 1000px; margin: 0 auto; display: grid; gap: 24px; }
+    .hero { display: grid; grid-template-columns: 1.5fr 1fr; gap: 28px; align-items: center; padding: 32px; }
+    .hero h1 { font-size: clamp(2.6rem, 7vw, 4.5rem); line-height: 0.95; text-shadow: 3px 3px 0 #18100c; }
+    .lead { margin: 14px 0 22px; max-width: 34em; font: 1.375rem/1.3 var(--ph-font-text); color: var(--ph-bone); }
+    .body { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; align-items: start; }
+    .ph-paper h2 { margin: 0 0 8px; padding-bottom: 2px; font: 400 1.75rem/1.1 var(--ph-font-plate); border-bottom: 2px solid var(--ph-paper-ink); }
+    .ph-paper p { max-width: 62ch; line-height: 1.3; }
+    .ph-paper p + p { margin-top: 10px; }
+    .steps { margin: 0; padding-left: 1.6em; }
+    .steps li + li { margin-top: 8px; }
+    .release { display: grid; grid-template-columns: 7em 1fr; gap: 6px 20px; }
+    .release + .release { margin-top: 18px; padding-top: 18px; border-top: 2px solid var(--ph-metal-lo); box-shadow: 0 -2px 0 var(--ph-metal-hi); }
+    .release time { font: 1.125rem var(--ph-font-text); color: var(--ph-bone); }
+    .release ul { margin: 0; padding-left: 1.2em; font: 1.25rem/1.25 var(--ph-font-text); color: var(--ph-bone); }
+    footer { font: 1.125rem var(--ph-font-text); color: var(--ph-bone); text-align: center; }
+    @media (max-width: 760px) {
+      .hero, .body { grid-template-columns: 1fr; padding: 20px; }
+      .release { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="ph-chassis">
+<main class="ph-crt">
+  <nav class="ph-nav" aria-label="Pages">
+    <a class="ph-tag" href="index.html">Kit</a>
+    <a class="ph-tag" href="login.html">Login</a>
+    <a class="ph-tag" href="barter.html">Barter</a>
+    <a class="ph-tag" href="options.html">Options</a>
+    <a class="ph-tag" href="bulletin.html" aria-current="page">Bulletin</a>
+  </nav>
+
+  <header class="ph-plate hero">
+    <div>
+      <h1 class="ph-label">Hollowstone Restored</h1>
+      <p class="lead">A fan patch for Dustline. It brings back the cut quests, the lost dialog and the flooded Cistern under the city of the burned.</p>
+      <div class="ph-row">
+        <a class="ph-button ph-button--lamp" href="#download">Download v1.4</a>
+        <a class="ph-button" href="#changelog">Read the changelog</a>
+      </div>
+    </div>
+    <div class="ph-stack">
+      <div class="ph-grille">Kael: The Cistern is open again. Do not make me regret it.</div>
+      <ul class="ph-screen ph-readout" aria-label="Patch contents">
+        <li>Restored quests <span>6</span></li>
+        <li>New dialog lines <span>1,240</span></li>
+        <li>Bug fixes <span>312</span></li>
+        <li>Restored maps <span>3</span></li>
+      </ul>
+    </div>
+  </header>
+
+  <div class="body">
+    <article class="ph-paper">
+      <h2>What the patch changes</h2>
+      <p>The burned of Hollowstone had more to say than the shipped game lets them. The game files still hold their lines, three unused maps and six quests that the team cut before release.</p>
+      <p>This patch connects that content again. You can enter the Cistern from the sewers, help Odell's family get out, and decide who controls the water pump after you take the chip.</p>
+      <p>The patch does not change the main story or the ending slides. If a line or a map was not in the game files, it is not in the patch.</p>
+    </article>
+
+    <section class="ph-screen" id="download" aria-labelledby="install-title">
+      <h2 class="ph-label" id="install-title" style="margin-bottom: 10px">Install</h2>
+      <ol class="steps">
+        <li>Make a copy of your Dustline folder.</li>
+        <li>Download hollowstone-restored-1.4.zip (48 MB).</li>
+        <li>Unzip it into the Dustline folder and replace the files.</li>
+        <li>Start a new game. Old saves do not get the new maps.</li>
+      </ol>
+    </section>
+  </div>
+
+  <section class="ph-plate" id="changelog" aria-labelledby="changelog-title">
+    <h2 class="ph-label" id="changelog-title" style="font-size: 1.75rem; margin-bottom: 18px">Changelog</h2>
+    <div class="release">
+      <div><span class="ph-tag">v1.4</span></div>
+      <div class="ph-stack" style="gap: 4px">
+        <time datetime="2026-09-12">12 September 2026</time>
+        <ul>
+          <li>Kael now remembers if you killed the mutants in the Cistern.</li>
+          <li>The water pump quest no longer stops when Brakk dies first.</li>
+          <li>Fixed 41 typos in the dialog of the burned.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="release">
+      <div><span class="ph-tag">v1.3</span></div>
+      <div class="ph-stack" style="gap: 4px">
+        <time datetime="2026-06-02">2 June 2026</time>
+        <ul>
+          <li>Restored the Cistern lower level.</li>
+          <li>Added Odell's family quest.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>A demo page for Phosphor UI. Dustline and every place in it are invented.</footer>
+</main>
+</body>
+</html>

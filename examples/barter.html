@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Barter With Marlow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Francois+One&family=VT323&display=swap">
+  <link rel="stylesheet" href="../phosphor.css">
+  <style>
+    main { max-width: 1100px; margin: 0 auto; display: grid; gap: 20px; }
+    .barter { display: grid; gap: 22px; }
+    .columns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+    .items { list-style: none; margin: 0; min-height: 9.6em; }
+    .items button { display: flex; gap: 0.5em; width: 100%; padding: 0; font: inherit; color: inherit; text-align: left; background: none; border: 0; cursor: pointer; }
+    .items button span:first-child { flex: 1; }
+    .items button:hover, .items button:focus-visible { color: var(--ph-green-hot); outline: none; }
+    .total { display: flex; justify-content: space-between; padding: 4px 12px; }
+    .controls { display: grid; grid-template-columns: 1fr 1.4fr auto; gap: 24px; align-items: start; }
+    .offer-row { display: flex; justify-content: center; margin-top: -6px; }
+    .caps output { font: 1.25rem var(--ph-font-text); color: var(--ph-green); }
+    @media (max-width: 860px) {
+      .columns { grid-template-columns: repeat(2, 1fr); }
+      .controls { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .columns { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="ph-chassis">
+<main class="ph-crt">
+  <nav class="ph-nav" aria-label="Pages">
+    <a class="ph-tag" href="index.html">Kit</a>
+    <a class="ph-tag" href="login.html">Login</a>
+    <a class="ph-tag" href="barter.html" aria-current="page">Barter</a>
+    <a class="ph-tag" href="options.html">Options</a>
+    <a class="ph-tag" href="bulletin.html">Bulletin</a>
+  </nav>
+
+  <section class="ph-plate barter" aria-labelledby="trader">
+    <div class="ph-stack" style="gap: 8px">
+      <h1 class="ph-label" id="trader" style="font-size: 1.75rem">Marlow, junk dealer</h1>
+      <div class="ph-grille" id="reply" role="status" aria-live="polite">Let's see what you've got.</div>
+    </div>
+
+    <div class="columns">
+      <div class="ph-stack">
+        <h2 class="ph-label">Your items</h2>
+        <ul class="ph-screen items" data-list="you" data-empty="You have nothing left."></ul>
+        <div class="ph-screen total"><span>Caps</span><span id="your-caps"></span></div>
+      </div>
+      <div class="ph-stack">
+        <h2 class="ph-label">Your offer</h2>
+        <ul class="ph-screen items" data-list="yourOffer" data-empty="Click your items to offer them."></ul>
+        <div class="ph-screen total"><span>Value</span><span id="your-total"></span></div>
+      </div>
+      <div class="ph-stack">
+        <h2 class="ph-label">Marlow's offer</h2>
+        <ul class="ph-screen items" data-list="theirOffer" data-empty="Click Marlow's items to ask for them."></ul>
+        <div class="ph-screen total"><span>Value</span><span id="their-total"></span></div>
+      </div>
+      <div class="ph-stack">
+        <h2 class="ph-label">Marlow's items</h2>
+        <ul class="ph-screen items" data-list="them" data-empty="Marlow is sold out."></ul>
+        <div class="ph-screen total"><span>Caps</span><span id="their-caps"></span></div>
+      </div>
+    </div>
+
+    <div class="offer-row">
+      <button class="ph-button ph-button--lamp" id="offer">Offer</button>
+    </div>
+
+    <div class="controls">
+      <label class="ph-stack caps" style="gap: 8px">
+        <span class="ph-label">Caps in your offer</span>
+        <input class="ph-slider" id="caps" type="range" min="0" step="1" value="0">
+        <output id="caps-out" for="caps"></output>
+      </label>
+      <article class="ph-paper" id="detail" aria-live="polite">
+        <h3>Item info</h3>
+        <p>Point at an item to read about it.</p>
+      </article>
+      <a class="ph-button" href="index.html">Talk</a>
+    </div>
+  </section>
+</main>
+
+<script>
+  const ITEMS = {
+    medkit: { name: "Medkit", value: 175, info: "A hypodermic of healing chemicals. Restores hit points at once." },
+    knife: { name: "Combat knife", value: 165, info: "A long blade with a serrated back. Good for close fights." },
+    jacket: { name: "Leather jacket", value: 250, info: "Black leather with a few holes. Light armor that still looks good." },
+    rope: { name: "Rope", value: 25, info: "A coil of strong rope. You can climb down wells with it." },
+    pistol: { name: "10mm pistol", value: 250, info: "A semi-automatic pistol. Uses 10mm ammo." },
+    ammo: { name: "10mm JHP", value: 75, info: "A box of 24 hollow-point rounds for 10mm weapons." },
+    radflush: { name: "Rad-Flush", value: 300, info: "Flushes radiation from the body. It takes time to work." },
+    powder: { name: "Healing powder", value: 20, info: "A tribal mix of herbs. Heals a little and dulls the mind." },
+  };
+  const PARTNER = { you: "yourOffer", yourOffer: "you", them: "theirOffer", theirOffer: "them" };
+  const lists = {
+    you: { medkit: 2, knife: 1, jacket: 1, rope: 1 },
+    yourOffer: {},
+    theirOffer: {},
+    them: { pistol: 1, ammo: 3, radflush: 1, powder: 4 },
+  };
+  const caps = { you: 764, them: 1200 };
+
+  const total = (list) => Object.entries(list).reduce((sum, [id, count]) => sum + ITEMS[id].value * count, 0);
+  console.assert(total({ medkit: 2, rope: 1 }) === 375, "total() is wrong");
+
+  const slider = document.getElementById("caps");
+  const reply = document.getElementById("reply");
+  const say = (text) => reply.textContent = text;
+
+  function move(from, id) {
+    const to = PARTNER[from];
+    lists[from][id] -= 1;
+    if (lists[from][id] === 0) delete lists[from][id];
+    lists[to][id] = (lists[to][id] ?? 0) + 1;
+  }
+
+  function mergeInto(target, source) {
+    Object.entries(lists[source]).forEach(([id, count]) => lists[target][id] = (lists[target][id] ?? 0) + count);
+    lists[source] = {};
+  }
+
+  function render() {
+    document.querySelectorAll("[data-list]").forEach((ul) => {
+      const entries = Object.entries(lists[ul.dataset.list]);
+      ul.replaceChildren(...(entries.length ? entries.map(([id, count]) => {
+        const li = document.createElement("li");
+        const button = document.createElement("button");
+        button.dataset.id = id;
+        button.innerHTML = `<span></span><span>x${count}</span><span>$${ITEMS[id].value}</span>`;
+        button.firstChild.textContent = ITEMS[id].name;
+        li.append(button);
+        return li;
+      }) : [Object.assign(document.createElement("li"), { className: "ph-dim", textContent: ul.dataset.empty })]));
+    });
+    slider.max = caps.you;
+    document.getElementById("caps-out").textContent = `$${slider.value} of $${caps.you}`;
+    document.getElementById("your-caps").textContent = `$${caps.you}`;
+    document.getElementById("their-caps").textContent = `$${caps.them}`;
+    document.getElementById("your-total").textContent = `$${total(lists.yourOffer) + Number(slider.value)}`;
+    document.getElementById("their-total").textContent = `$${total(lists.theirOffer)}`;
+  }
+
+  document.querySelector(".columns").addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-id]");
+    if (!button) return;
+    move(button.closest("[data-list]").dataset.list, button.dataset.id);
+    render();
+  });
+
+  const showDetail = (event) => {
+    const button = event.target.closest("button[data-id]");
+    if (!button) return;
+    const item = ITEMS[button.dataset.id];
+    const detail = document.getElementById("detail");
+    detail.querySelector("h3").textContent = item.name;
+    detail.querySelector("p").textContent = item.info;
+  };
+  document.querySelector(".columns").addEventListener("mouseover", showDetail);
+  document.querySelector(".columns").addEventListener("focusin", showDetail);
+
+  slider.addEventListener("input", render);
+
+  document.getElementById("offer").addEventListener("click", () => {
+    const capsOffered = Number(slider.value);
+    const yours = total(lists.yourOffer) + capsOffered;
+    const theirs = total(lists.theirOffer);
+    if (theirs === 0) return say(yours === 0 ? "You have to offer something." : "What do you want for that?");
+    if (yours < theirs) return say(`No deal. I want $${theirs - yours} more.`);
+    mergeInto("them", "yourOffer");
+    mergeInto("you", "theirOffer");
+    caps.you -= capsOffered;
+    caps.them += capsOffered;
+    slider.value = 0;
+    render();
+    say("Deal. Pleasure doing business.");
+  });
+
+  render();
+</script>
+</body>
+</html>
